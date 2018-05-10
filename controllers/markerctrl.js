@@ -87,11 +87,10 @@ exports.getMarkerSavedata = (req, res) => {
  	console.log(req.params.id);
 
 	User.find({
-		url: req.params.id
+		//url: req.params.id  para que salga un unico marcador
 	}).lean().exec(function (err, markers) {
 		if (err) return console.error(err);
 		console.log('Busqueda de marcadores realizada,resultados obtenidos ' + markers.length + ' marcadores');
 		res.send('{"markers":' + JSON.stringify(markers) + '}');
 	})
-	res.send('');
 }
