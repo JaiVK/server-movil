@@ -1,11 +1,46 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require('express');
+const app = express();
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.raw();
+const urlencodedParser = bodyParser.urlencoded({extended: false})
+
+//conexion a la base de datos
+
+const mongoose = require('mongoose');
+const mongodbRoute = 'mongodb://server-movil:server-movil@ds219100.mlab.com:19100/marcadores';
+const port = 3001;
+const mongodbOptions = {
+    socketTimeoutMS: 0,
+    keepAlive: true,
+    reconnectTries: 30
+};
+
+mongoose.Promise = global.Promise
+const db = mongoose.connect(mongodbRoute, mongodbOptions, (err) => {
+    if (err) {
+        return console.log(`Error al conectar a la base de datos: ${err}`)
+    }
+    app.listen(port, () => {
+        console.log(`Servidor up en ${port}`);
+    });
+    console.log(`Conexión a mongo correcta.`)
+});
+
+
+
+
+
+
+
+
+
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var usersRouter = require('./routes/marker');
 
 var app = express();
 
@@ -19,12 +54,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
 // error handler
