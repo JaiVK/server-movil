@@ -31,18 +31,9 @@ const db = mongoose.connect(mongodbRoute, mongodbOptions, (err) => {
 });
 
 
-
-
-
-
-
-
-
-
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/marker');
 
-var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
